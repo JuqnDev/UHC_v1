@@ -1,0 +1,5 @@
+name: UHC
+version: "0.1"
+author: "JuqnGOOD"
+main: uhc.UHCLoader
+api: ["1.0.0"]
