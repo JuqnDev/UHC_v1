@@ -5,6 +5,7 @@ import cn.nukkit.level.Level;
 import uhc.game.utils.GameState;
 import uhc.UHCLoader;
 import uhc.scoreboard.Scoreboard;
+import uhc.sessions.SessionManager;
 
 public class Game {
 
@@ -12,20 +13,22 @@ public class Game {
     private final Server server;
 
     private final Scoreboard scoreboard;
+    private final SessionManager sessions;
 
-    private Level level;
+    private Object level = null;
 
-    private int state = GameState.WAITING;
+    private int state = GameState.RUNNING;
 
     public Game(UHCLoader plugin) {
         this.plugin = plugin;
         this.server = plugin.getServer();
 
+        /* Register managers */
+        this.scoreboard = new Scoreboard(this);
+        this.sessions = new SessionManager();
+
         /* Register main game listener */
         new GameListener(this);
-
-        /* Create scoreboard */
-        this.scoreboard = new Scoreboard(this);
     }
 
     public UHCLoader getPlugin() {
@@ -39,6 +42,10 @@ public class Game {
 
     public Scoreboard getScoreboard() {
         return scoreboard;
+    }
+
+    public SessionManager getSessions() {
+        return sessions;
     }
 
     public Object getLevel() {

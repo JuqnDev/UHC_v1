@@ -24,6 +24,10 @@ public class GamePlayer extends Player {
         return spawned;
     }
 
+    public Object getData() {
+        return getGame().getSessions().getPlayer(this);
+    }
+
     @Override
     protected void processMovement(int tickDiff) {
         if (getGame().getState() != GameState.RUNNING) {
@@ -69,5 +73,23 @@ public class GamePlayer extends Player {
             default:
                 return "Unknown";
         }
+    }
+
+    public void join() {
+        if (getGame().getSessions().getPlayer(this) == null)
+            getGame().getSessions().addPlayer(this);
+
+        if (getGame().getState() == GameState.WAITING) {
+            reset();
+            teleport(getServer().getDefaultLevel().getSpawnLocation());
+        }
+    }
+
+    public void reset() {
+        setHealth(20);
+        setGamemode(0);
+        setExperience(0, 0);
+        getInventory().clearAll();
+        removeAllEffects();
     }
 }

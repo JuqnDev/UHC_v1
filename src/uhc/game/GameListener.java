@@ -1,15 +1,16 @@
 package uhc.game;
 
-import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
-import cn.nukkit.event.entity.EntityRegainHealthEvent;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerChatEvent;
-import cn.nukkit.potion.Effect;
+import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.utils.TextFormat;
+import uhc.game.utils.GameState;
 import uhc.player.GamePlayer;
+import uhc.sessions.types.PlayerSession;
 
 public class GameListener implements Listener {
 
@@ -46,16 +47,10 @@ public class GameListener implements Listener {
     }
 
     @EventHandler
-    public void handleRegainHealth(EntityRegainHealthEvent event) {
-        Object entity = event.getEntity();
-
-        if (!(entity instanceof EntityLiving))
-            return;
-
-        if (((EntityLiving) entity).hasEffect(Effect.REGENERATION))
-            return;
-
-        event.setCancelled(true);
+    public void handleDamage(EntityDamageEvent event) {
+        if (getGame().getState() != GameState.RUNNING) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
@@ -63,7 +58,18 @@ public class GameListener implements Listener {
         Object player = event.getPlayer();
 
         if (player instanceof GamePlayer) {
-            event.setFormat(TextFormat.GREEN + ((GamePlayer) player).getDeviceOS() + " " + TextFormat.GRAY + ((GamePlayer) player).getName() + ": " + TextFormat.WHITE + event.getMessage());
+            if (event.getMessage().equals("%addkill")) {
+                ((PlayerSession) ((GamePlayer) player).getData()).addElimination();
+            }
+        }
+    }
+
+    @EventHandler
+    public void handleJoin(PlayerJoinEvent event) {
+        Object player = event.getPlayer();
+
+        if (player instanceof GamePlayer && ((GamePlayer) player).isSpawned()) {
+            ((GamePlayer) player).join();
         }
     }
 }

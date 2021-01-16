@@ -38,8 +38,7 @@ public class GameTask extends Task {
              getPlugin().getServer().getOnlinePlayers().values()) {
             if (player instanceof GamePlayer && ((GamePlayer) player).isSpawned()) {
                 game.getScoreboard().updateScoreboard((GamePlayer) player);
-                player.setNameTag(TextFormat.WHITE + player.getName() + TextFormat.GREEN  + " [" + ((GamePlayer) player).getDeviceOS() + "]");
-                player.setScoreTag(TextFormat.WHITE + String.valueOf(Math.round(player.getHealth() * 100.0) / 100.0) + TextFormat.RED + " ❤");
+                player.setNameTag(TextFormat.WHITE + player.getName() + TextFormat.GREEN  + " [" + ((GamePlayer) player).getDeviceOS() + "]\n" + TextFormat.WHITE + Math.round(player.getHealth() * 100.0) / 100.0 + TextFormat.RED + " ❤");
             }
         }
     }
