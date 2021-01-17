@@ -1,12 +1,14 @@
 package uhc.player;
 
 import cn.nukkit.Player;
+import cn.nukkit.level.Level;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.utils.LoginChainData;
 import uhc.UHCLoader;
 import uhc.game.Game;
 import uhc.game.utils.GameState;
 import uhc.player.utils.PlayerUtils;
+import uhc.sessions.types.PlayerSession;
 
 import java.net.InetSocketAddress;
 
@@ -76,12 +78,36 @@ public class GamePlayer extends Player {
     }
 
     public void join() {
+        PlayerSession data = (PlayerSession) getData();
+
         if (getGame().getSessions().getPlayer(this) == null)
             getGame().getSessions().addPlayer(this);
 
-        if (getGame().getState() == GameState.WAITING) {
-            reset();
-            teleport(getServer().getDefaultLevel().getSpawnLocation());
+        switch (getGame().getState()) {
+            case GameState.WAITING:
+                reset();
+                teleport(getServer().getDefaultLevel().getSpawnLocation());
+                break;
+
+            case GameState.SETUP:
+                if (!data.isScattering()) {
+                    reset();
+                    teleport(getServer().getDefaultLevel().getSpawnLocation());
+                }
+                break;
+
+            case GameState.COUNTDOWN:
+            case GameState.RUNNING:
+            case GameState.RESTARTING:
+                if (!data.isScattering()) {
+                    if (!data.isSpectator() || (data.isSpectator() && getGamemode() == 0)) {
+                        data.setSpectator(true);
+                        reset();
+                        Level level = (Level) getGame().getLevel();
+                        teleport(level.getSpawnLocation().add(0, 1, 0));
+                    }
+                }
+                break;
         }
     }
 

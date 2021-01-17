@@ -50,6 +50,12 @@ public class GameListener implements Listener {
     public void handleDamage(EntityDamageEvent event) {
         if (getGame().getState() != GameState.RUNNING) {
             event.setCancelled(true);
+        } else {
+            Object entity = event.getEntity();
+
+            if (entity instanceof GamePlayer && ((GamePlayer) entity).isSpawned()) {
+                GamePlayer player = (GamePlayer) entity;
+            }
         }
     }
 
@@ -58,9 +64,12 @@ public class GameListener implements Listener {
         Object player = event.getPlayer();
 
         if (player instanceof GamePlayer) {
-            if (event.getMessage().equals("%addkill")) {
-                ((PlayerSession) ((GamePlayer) player).getData()).addElimination();
+            if (event.getMessage().equals("#state")) {
+                event.setCancelled();
+                getGame().setState(game.getState() + 1);
             }
+
+            event.setFormat(TextFormat.GRAY + ((GamePlayer) player).getName() + ": " + TextFormat.WHITE + event.getMessage());
         }
     }
 

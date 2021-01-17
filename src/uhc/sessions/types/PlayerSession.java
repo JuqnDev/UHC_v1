@@ -10,6 +10,8 @@ public class PlayerSession {
     private boolean spectator = false;
     private boolean host = false;
 
+    private boolean scattering = false;
+
     public PlayerSession(String name, boolean spectator) {
         this.name = name;
         this.spectator = spectator;
@@ -39,6 +41,10 @@ public class PlayerSession {
         return host;
     }
 
+    public boolean isScattering() {
+        return scattering;
+    }
+
     public void setEliminations(int eliminations) {
         this.eliminations = eliminations;
     }
@@ -57,5 +63,9 @@ public class PlayerSession {
 
     public void setHost(boolean host) {
         this.host = host;
+    }
+
+    public void setScattering(boolean scattering) {
+        this.scattering = scattering;
     }
 }

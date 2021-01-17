@@ -19,13 +19,20 @@ public class UHCLoader extends PluginBase {
     public void onEnable() {
         getLogger().info("Plugin enabled!");
 
-        /* Register listener */
+        initListener();
+        initGame();
+        initTask();
+    }
+
+    private void initListener() {
         new UHCListener(this);
+    }
 
-        /* Register game class */
+    private void initGame() {
         this.game = new Game(this);
+    }
 
-        /* Task */
+    private void initTask() {
         getServer().getScheduler().scheduleRepeatingTask(new GameTask(this), 1);
     }
 

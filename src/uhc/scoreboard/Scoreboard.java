@@ -5,6 +5,7 @@ import gt.creeperface.nukkit.scoreboardapi.ScoreboardAPI;
 import gt.creeperface.nukkit.scoreboardapi.scoreboard.SimpleScoreboard;
 import uhc.game.Game;
 import uhc.game.utils.GameState;
+import uhc.game.utils.GameTimer;
 import uhc.player.GamePlayer;
 import uhc.sessions.types.PlayerSession;
 
@@ -36,8 +37,12 @@ public class Scoreboard {
                 lines.add(TextFormat.RED + "Scattering players: " + TextFormat.WHITE + "0");
                 break;
 
+            case GameState.COUNTDOWN:
+                lines.add(TextFormat.RED + "Start in: " + GameTimer.COUNTDOWN);
+                break;
+
             case GameState.RUNNING:
-                lines.add(TextFormat.RED + "Game Time: " + TextFormat.WHITE + "00:00:00");
+                lines.add(TextFormat.RED + "Game Time: " + TextFormat.WHITE + GameTimer.getTimeRunning());
                 lines.add(TextFormat.RED + "Remaining: "  + TextFormat.WHITE + game.getServer().getOnlinePlayers().size());
                 lines.add(TextFormat.RED + "Eliminations: " + TextFormat.WHITE + data.getEliminations());
                 lines.add(TextFormat.RED + "Border: " + TextFormat.WHITE + "1000");
