@@ -64,11 +64,6 @@ public class GameListener implements Listener {
         Object player = event.getPlayer();
 
         if (player instanceof GamePlayer) {
-            if (event.getMessage().equals("#state")) {
-                event.setCancelled();
-                getGame().setState(game.getState() + 1);
-            }
-
             event.setFormat(TextFormat.GRAY + ((GamePlayer) player).getName() + ": " + TextFormat.WHITE + event.getMessage());
         }
     }
