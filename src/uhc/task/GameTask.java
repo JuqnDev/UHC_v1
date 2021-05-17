@@ -25,9 +25,9 @@ public class GameTask extends Task {
     public void onRun(int i) {
         int oneSecond = TaskUtils.secondsToTick(1);
 
-        if (currentTick % oneSecond == 0 || currentTick == 0) {
+        /*if (currentTick % oneSecond == 0 || currentTick == 0) {
             updatePlayers();
-        }
+        }*/
         currentTick++;
     }
 

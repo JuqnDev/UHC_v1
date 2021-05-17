@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.level.Level;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.utils.LoginChainData;
+import cn.nukkit.utils.TextFormat;
 import uhc.UHCLoader;
 import uhc.game.Game;
 import uhc.game.utils.GameState;
@@ -28,15 +29,6 @@ public class GamePlayer extends Player {
 
     public Object getData() {
         return getGame().getSessions().getPlayer(this);
-    }
-
-    @Override
-    protected void processMovement(int tickDiff) {
-        if (getGame().getState() != GameState.RUNNING) {
-            PlayerUtils.setFood(this, 20);
-        }
-
-        super.processMovement(tickDiff);
     }
 
     public String getDeviceOS() {
@@ -118,4 +110,24 @@ public class GamePlayer extends Player {
         getInventory().clearAll();
         removeAllEffects();
     }
+    
+    public boolean onUpdate(int currentTick) {
+    	if (currentTick % 20 == 0 && isSpawned()) {
+    		getGame().getScoreboard().updateScoreboard(this);
+            this.setNameTag(TextFormat.WHITE + this.getName() + TextFormat.GREEN  + " [" + this.getDeviceOS() + "]\n" + TextFormat.WHITE + Math.round(this.getHealth() * 100.0) / 100.0 + TextFormat.RED + " ❤");
+        }
+    	
+    	return super.onUpdate(currentTick);
+    }
+    
+    @Override
+    protected void processMovement(int tickDiff) {
+        /*if (getGame().getState() != GameState.RUNNING) {
+            PlayerUtils.setFood(this, 20);
+        }*/
+
+        super.processMovement(tickDiff);
+    }
+    
+    
 }
